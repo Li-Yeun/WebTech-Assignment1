@@ -14,3 +14,5 @@ body {
 
   a:hover {
     color: #66ff00; }
+
+@media only screen and (max-width: 600px) {}
