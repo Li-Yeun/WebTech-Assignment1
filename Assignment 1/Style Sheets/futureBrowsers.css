@@ -1,1 +1,32 @@
 @import url("main.css");
+
+figure.logos{
+    position :absolute;
+    float:right;
+    right: 3%;
+    top: 1%;
+    text-align: center;
+  }
+  
+.inpagelinks
+{
+    background-color: rgb(255, 255, 255);
+    margin: 0.8%;
+    margin-top: 0%;
+}
+
+.inpagelinks a
+{
+    display: normal;
+    color: #000000;
+    text-align: left;
+    padding: 0%;
+    text-decoration: none;
+    font-size: 20px;
+    width: 20%;
+}
+
+.inpagelinks li{list-style: none;}
+.inpagelinks a:link{color: black;}
+.inpagelinks a:visited{color:black}
+.inpagelinks a:hover{color:black}
