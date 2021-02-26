@@ -2,18 +2,31 @@ body {
   width: 92%;
   min-height: 900px;
   /* border: 2px solid rgba(112, 112, 112, 0.541); */
-  padding-top: 0%;
-  padding-left: 1%;
-  padding-right: 1%;
   margin-right: auto; 
   margin-left: auto;
+  background: linear-gradient(#9198e5, #b3b3b3);
+  border-style: solid;
+  border-width: 10px;
+  border-left-width: 10px;
+  border-right-width: 10px;
+  border-color: rgba(126, 126, 126, 0.377);
   }
-  
+
+article{
+  padding-top: 1%;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-bottom: 1%;
+  background-color: #ffffff;
+  }
 header
 {
+  padding-top: 1%;
+  padding-bottom: 1%;
   padding-left: 1%;
   padding-right: 1%;
   font-family: verdana;
+  background-color: #ffffff;
 }
 
 h1 {
@@ -47,7 +60,7 @@ nav a {
   display: inline-block;
   color: #f2f2f2;
   text-align: center;
-  padding: 18px 25px;
+  padding: 20px 20px;
   text-decoration: none;
   font-size: 20px;
   width: 15%;
@@ -69,14 +82,27 @@ nav .currentLink:hover{
   color: black;
 } 
 
-  a:hover {
-    color: #66ff00; }
+a:hover {
+  color: #66ff00; }
 
 figure.logos{
+  position :absolute;
   float:right;
-  text-align: center;}
+  right: 3%;
+  top: 3%;
+  text-align: center;
+}
 
-ul.inpagelinks li{list-style: none;}
-ul.inpagelinks a:link{color: black;}
-ul.inpagelinks a:visited{color:black}
-ul.inpagelinks a:hover{color:black}
+th, td {
+  border: 1px solid black;
+  text-align: left;
+  background-color:#9198e5;
+}
+
+th {
+  background-color: rgb(0, 255, 76);
+}
+
+table {
+  border-collapse: collapse;
+}
