@@ -23,6 +23,11 @@ header
   background-color: #ffffff;
 }
 
+footer{
+  padding: 1% 4%;
+  background-color: #ffffff;
+  }
+
 header p
 {
   font-style: italic;
