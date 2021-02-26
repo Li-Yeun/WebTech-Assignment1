@@ -92,3 +92,11 @@ figure.logos{
   top: 3%;
   text-align: center;
 }
+
+table, th, td {
+  border: 1px solid black;
+}
+
+table {
+  border-collapse: collapse;
+}
