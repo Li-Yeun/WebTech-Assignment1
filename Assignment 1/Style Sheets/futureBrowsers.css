@@ -12,8 +12,6 @@ figure.logos{
 {
     background-color: rgb(255, 255, 255);
     padding: 0.8%;
-    margin-top: 0%;
-
 }
 
 .inpagelinks a
@@ -30,4 +28,4 @@ figure.logos{
 .inpagelinks li{list-style: none;}
 .inpagelinks a:link{color: black;}
 .inpagelinks a:visited{color:black}
-.inpagelinks a:hover{color:black}
+.inpagelinks a:hover{color:#ddd}
