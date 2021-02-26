@@ -29,6 +29,12 @@ header
   background-color: #ffffff;
 }
 
+header p
+{
+  font-style: italic;
+  font-size: 17px;
+  text-align: center;
+}
 h1 {
   color: rgb(0, 0, 0);
   text-align: center;
