@@ -1,9 +1,9 @@
 @import url("main.css");
 
 figure.logos{
-    position :absolute;
+    position :relative;
     float:right;
-    right: 3%;
+    right: 0%;
     top: 1%;
     text-align: center;
   }

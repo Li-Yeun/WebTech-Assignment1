@@ -86,10 +86,10 @@ a:hover {
   color: #66ff00; }
 
 figure.logos{
-  position :absolute;
+  position :relative;
   float:right;
-  right: 3%;
-  top: 3%;
+  right: -3%;
+  top: 0%;
   text-align: center;
 }
 
