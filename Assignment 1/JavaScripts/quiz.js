@@ -5,11 +5,11 @@ function makeQuiz(){
         const possAnswers = [];
         if(currentQuestion.choice)
         {
-            for(l in currentQuestion.answer){
+            for(l in currentQuestion.answers){
                 possAnswers.push( 
                     `<label>
                     <input type="radio" name="question${questionNumber}" value="${l}"/>
-                    ${l}: ${currentQuestion.answers[l]}
+                    ${l}: ${currentQuestion.answers[l]} <br>
                     </label>`
                 );
             }
