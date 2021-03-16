@@ -7,9 +7,10 @@
         <meta name = "keywords" content = "Safari, Apple, WebKit, Web Technology, IOS">
 
         <link rel="stylesheet" href="../Style Sheets/safari.css"> 
+        <script src="../JavaScripts/menu.js"></script>
     </head>
 
-    <body>
+    <body onload="checkElementSelector()">
         <header>
         <h1>Welcome to the Safari Web Page! </h1>
         <p>The Safari web browser is developed by Apple, and is used in the operating systems of MacOs, IOS and IPadOS. 
@@ -126,6 +127,33 @@
         <footer>
             <h3>References</h3>
             <a href="https://en.wikipedia.org/wiki/Safari_(web_browser)">https://en.wikipedia.org/wiki/Safari_(web_browser)</a>
+
+            <hr>
+            
+            <label for="element-selector">Select element:</label>
+            <select name="elements" id="element-selector">
+                <option value="body">Body</option>
+                <option value="header">Header</option>
+                <option value="footer">Footer</option>
+                <option value="aside">Aside</option>
+                <option value="article">Articles</option>
+                <option value="section">Sections</option>
+            </select>
+
+            <label for="appearance-selector">Select appearance:</label>
+            <select name="appearance" id="appearance-selector" onchange="changeValueSelector()">
+                <option value="font-size">Font-Size</option>
+                <option value="color-scheme">Color-Scheme</option>
+            </select>
+
+            <label for="value-selector">Select value:</label>
+            <select name="value" id="value-selector">
+                <option value="10px">10 px</option>
+                <option value="15px">15 px</option>
+            </select>
+
+
+            <input type="button" value="Apply" onclick="apply()"/>  
         </footer>
     </body>
 </html>
