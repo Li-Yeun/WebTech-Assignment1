@@ -43,10 +43,11 @@ function setAttributeProperty(input, attribute, value)
     switch(attribute)
     {
         case "font-size": input.style.fontSize = value + "px";
-                        alert(value + "px")
                         break;
         case "color-scheme": input.style.color = value;
                         break;
+        case "font-family": input.style.fontFamily = value;
+
     }
 }
 
@@ -61,6 +62,8 @@ function changeValueSelector()
                           break;
         case "color-scheme": newSelector = createInputSelector("color");
                              break;
+        case "font-family": newSelector = createSelectSelector(["Verdana", "Arial", "Calibri", "Courier", "Impact", "Jazz LET"]);
+                          break;
     }       
     
     valueSelector.replaceWith(newSelector);
@@ -74,7 +77,22 @@ function createInputSelector(type)
     selector.id = "value-selector";
     return selector;
 }
+function createSelectSelector(array)
+{
+    var selector = document.createElement("select");
+    selector.name = "value";
+    selector.id = "value-selector";
 
+    for (let i = 0; i < array.length; i++) {
+        let option = document.createElement("option");
+        option.value = array[i];
+        option.text = array[i];
+        option.text.fontFamily = array[i]
+        selector.appendChild(option);
+    }
+
+    return selector;
+}
 function checkElementSelector()
 {
     var elements = document.getElementById("element-selector").options;
@@ -87,3 +105,4 @@ function checkElementSelector()
          }
     }
 }
+

@@ -7,12 +7,35 @@
         <meta name = "description" content="Learn about the history of web browsers and its function">
         <meta name = "keywords" content = "browsers, Web browsers, World Wide Web, Microsoft, Netscape">
         <link rel="stylesheet" href="../style_sheets/web_browsers.css">
+        <script src="../java_scripts/menu.js"></script>
         <meta charset="UTF-8">
     </head>
 
-    <body>                          <!-- Start of the content -->
+    <body onload="checkElementSelector()">          <!-- Start of the content -->
         <header>
-        <h1>Welcome to the static information website about Web Browsers</h1>            <!-- Heading 1 -->
+            <label for="element-selector">Select element:</label>
+            <select name="elements" id="element-selector">
+                <option value="body">Body</option>
+                <option value="header">Header</option>
+                <option value="footer">Footer</option>
+                <option value="aside">Aside</option>
+                <option value="article">Articles</option>
+                <option value="section">Sections</option>
+            </select>
+
+            <label for="appearance-selector">Select appearance:</label>
+            <select name="appearance" id="appearance-selector" onchange="changeValueSelector()">
+                <option value="font-size">Font-Size</option>
+                <option value="color-scheme">Color-Scheme</option>
+                <option value="font-family">Font-Type</option>
+            </select>
+
+            <label for="value-selector">Select value:</label>
+            <input type = "number" name="value" id="value-selector">
+
+            <input type="button" value="Apply" onclick="apply()"/>  
+
+            <h1>Welcome to the static information website about Web Browsers</h1>            <!-- Heading 1 -->
         </header>
         <nav>
             <a href="index.html" class="currentLink">Home</a>
