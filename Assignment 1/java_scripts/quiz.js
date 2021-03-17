@@ -42,14 +42,12 @@ function showAnswer(){
             givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
         }
         else {
-            //const openSelector = `div.answers.input[name=question${questionNumber}][type="text"]`;
-            //givenAnswer = (document.querySelector(openSelector) || {}).value;
             givenAnswer = (document.getElementById('openQuestion') || {}).value;
         }
 
         if(givenAnswer == currentQuestion.correctAnswer){corrAnswers++;}
     });
-    result.innerHTML = `You got ${corrAnswers} questions correct!`;
+    result.innerHTML = `<br>You got ${corrAnswers} questions correct!`;
 }
 
 //var
@@ -57,18 +55,26 @@ const questions = document.getElementById('question');
 const submit = document.getElementById('submit');
 const result = document.getElementById('output');
 const theQuestions = [
-    { question:"Finish the lyrics: \"I want...\"", 
-    answers: {a:"to break free", b:"it all", c:"to ride my bicycle", d:"to make a supersonic man out of you"}, 
+    { question:"When was the first actual realease of Google Chrome", 
+    answers: {a:"September 2, 2008", b:"21st night of september", c:"December 11, 2008"}, 
     correctAnswer:"a",
     choice:true},
-    { question:"What is the name of the football club located in Breda?",
-    answers:{a:"NAC", b:"Noad Advendo Combinatie", c: "Nooit Opgeven Altijd Doorzetten Aangenaam Door Vermaak En Nuttig Door Ontspanning Combinatie", d:"Ajax"},
+    { question:"What was Microsoft Edge's code-name?",
+    answers:{a:"Hercules", b:"Chromium", c: "Spartan", d:"Ajax"},
     correctAnswer:"c",
     choice:true},
     { question:"What browser is made for apple devices?",
     correctAnswer:"Safari",
+    answers: undefined,     // so that .answers gives the same amount as length of theQuestions
+    choice:false},
+    {question:"What is the main villain of an online platforming game?",
     answers: undefined,
-    choice:false}
+    correctAnswer:"Browser",
+    choice:false},
+    {question:"Who developed Safari?",
+    answers: {a:"Apple", b:"Steve Jobs", c:"Microsoft", d:"Nvidia"},
+    correctAnswer:"a",
+    choice:true}
 ]
 
 makeQuiz();
