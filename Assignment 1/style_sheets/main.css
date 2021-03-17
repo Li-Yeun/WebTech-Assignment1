@@ -103,6 +103,11 @@ figure.logos{
     display: block;
     text-align: left;
   }
+
+  table{
+    display: block;
+    overflow: scroll;
+  }
 }
 
 th, td {
@@ -117,7 +122,6 @@ th {
 
 table {
   border-collapse: collapse;
-  word-break: break-all;
 }
 
 button{
