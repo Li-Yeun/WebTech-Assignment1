@@ -5,22 +5,26 @@ function makeQuiz(){
         const possAnswers = [];
         if(currentQuestion.choice)
         {
-            for(l in currentQuestion.answers){
+            for(a in currentQuestion.answers){
                 possAnswers.push( 
                     `<label>
-                    <input type="radio" name="question${questionNumber}" value="${l}"/>
-                    ${l}: ${currentQuestion.answers[l]} <br>
+                    <input type="radio" name="question${questionNumber}" value="${a}"/>
+                    ${a}: ${currentQuestion.answers[a]} <br>
                     </label>`
                 );
             }
         }
         else
         {
-            possAnswers.push(`<input type="text" name="question${questionNumber}" placeholder="put your answer here:"/>`)
+            possAnswers.push(
+                `<label>
+                <input type="text" name="question${questionNumber}" id="openQuestion" placeholder="put your answer here:"/>
+                </label>`
+            );
         }
         output.push(
             `<div class="question"> ${currentQuestion.question}</div>
-            <div class="answers"> ${possAnswers.join('')}</div>`
+            <div class="answers"> ${possAnswers.join('')}</div><br>`
         );
     })
     questions.innerHTML = output.join('');
@@ -29,11 +33,19 @@ function makeQuiz(){
 //button
 function showAnswer(){
     const answers = questions.querySelectorAll('.answers')
-    let corrAnswers = 0;
+    var corrAnswers = 0;
     theQuestions.forEach((currentQuestion, questionNumber) => {
+        var givenAnswer;
         const answerNumber = answers[questionNumber];
-        const selector =  `input[name=question${questionNumber}]:checked`;
-        const givenAnswer = (answerNumber.querySelector(selector) || {}).value;
+        if (currentQuestion.choice) {
+            const choiceSelector =  `input[name=question${questionNumber}]:checked`;
+            givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
+        }
+        else {
+            //const openSelector = `div.answers.input[name=question${questionNumber}][type="text"]`;
+            //givenAnswer = (document.querySelector(openSelector) || {}).value;
+            givenAnswer = (document.getElementById('openQuestion') || {}).value;
+        }
 
         if(givenAnswer == currentQuestion.correctAnswer){corrAnswers++;}
     });
@@ -55,6 +67,7 @@ const theQuestions = [
     choice:true},
     { question:"What browser is made for apple devices?",
     correctAnswer:"Safari",
+    answers: undefined,
     choice:false}
 ]
 
