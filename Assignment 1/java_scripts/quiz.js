@@ -1,12 +1,11 @@
 //show questions
 function makeQuiz(){
     const output = [];
-    theQuestions.forEach((currentQuestion, questionNumber) => {
-        const possAnswers = [];
-        if(currentQuestion.choice)
-        {
-            for(a in currentQuestion.answers){
-                possAnswers.push( 
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+    const possAnswers = [];
+    if(currentQuestion.choice){
+        for(a in currentQuestion.answers){
+            possAnswers.push( 
                     `<label>
                     <input type="radio" name="question${questionNumber}" value="${a}"/>
                     ${a}: ${currentQuestion.answers[a]} <br>
@@ -18,7 +17,7 @@ function makeQuiz(){
         {
             possAnswers.push(
                 `<label>
-                <input type="text" name="question${questionNumber}" id="openQuestion" placeholder="put your answer here:"/>
+                <input type="text" name="question${questionNumber}" id="openQuestion${questionNumber}" placeholder="put your answer here:"/>
                 </label>`
             );
         }
@@ -34,7 +33,7 @@ function makeQuiz(){
 function showAnswer(){
     const answers = questions.querySelectorAll('.answers')
     var corrAnswers = 0;
-    theQuestions.forEach((currentQuestion, questionNumber) => {
+    myQuestions.forEach((currentQuestion, questionNumber) => {
         var givenAnswer;
         const answerNumber = answers[questionNumber];
         if (currentQuestion.choice) {
@@ -42,7 +41,7 @@ function showAnswer(){
             givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
         }
         else {
-            givenAnswer = (document.getElementById('openQuestion') || {}).value;
+            givenAnswer = (document.getElementById(`openQuestion${questionNumber}`) || {}).value;
         }
 
         if(givenAnswer == currentQuestion.correctAnswer){corrAnswers++;}
@@ -54,7 +53,7 @@ function showAnswer(){
 const questions = document.getElementById('question');
 const submit = document.getElementById('submit');
 const result = document.getElementById('output');
-const theQuestions = [
+const theQuestions = [  // can be removed after it is put on the DB
     { question:"When was the first actual realease of Google Chrome", 
     answers: {a:"September 2, 2008", b:"21st night of september", c:"December 11, 2008"}, 
     correctAnswer:"a",
@@ -65,7 +64,7 @@ const theQuestions = [
     choice:true},
     { question:"What browser is made for apple devices?",
     correctAnswer:"Safari",
-    answers: undefined,     // so that .answers gives the same amount as length of theQuestions
+    answers: undefined,     // so that .answers gives the same length as theQuestions
     choice:false},
     {question:"What is the main villain of an online platforming game?",
     answers: undefined,
@@ -76,6 +75,14 @@ const theQuestions = [
     correctAnswer:"a",
     choice:true}
 ]
-
-makeQuiz();
-submit.addEventListener('click', showAnswer);
+var registeredUser = true; // placeholder, only registered can answer questions.
+const jsonQuestions = '[{ "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
+    // placeholder for the json input
+var myQuestions = JSON.parse(jsonQuestions);
+if(registeredUser){
+    makeQuiz();
+    submit.addEventListener('click', showAnswer);
+}
+else{
+    questions.innerHTML = `ya need ta be registered man.`;
+}
