@@ -1,7 +1,7 @@
 //show questions
-function makeQuiz(qsts){
+function makeQuiz(){
     const output = [];
-    qsts.forEach((currentQuestion, questionNumber) => {
+    myQuestions.forEach((currentQuestion, questionNumber) => {
     const possAnswers = [];
     if(currentQuestion.choice){
         for(a in currentQuestion.answers){
@@ -29,18 +29,22 @@ function makeQuiz(qsts){
             <br>
             <div class="answers"> ${possAnswers.join('')}</div>
             <br>
+            <button id="submit" onclick=showAnswer()>Submit</button>
+            <br><br>
             <button id="back" onclick=pickTopic()>Back</button> <br>`
         );
     })
     questions.innerHTML = output.join('');
-    questions.innerHTML += (`<br> <button id="submit" onclick=showAnswer(${qsts})>Submit</button>`);
+    //questions.innerHTML += (`<br> <button id="submit" onclick=alert("${myQuestions}")>Submit</button>`);
 }
 
+function test(test){alert(test)}
+
 // submit button & checking
-function showAnswer(qsts){
+function showAnswer(){
     const answers = questions.querySelectorAll('.answers')
     var corrAnswers = 0;
-    qsts.forEach((currentQuestion, questionNumber) => {
+    myQuestions.forEach((currentQuestion, questionNumber) => {
         var givenAnswer;
         const answerNumber = answers[questionNumber];
         if (currentQuestion.choice) {
