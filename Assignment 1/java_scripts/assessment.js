@@ -1,4 +1,4 @@
-//show questions
+//create the questions
 function makeQuiz(){
     const output = [];
     myQuestions.forEach((currentQuestion, questionNumber) => {
@@ -35,33 +35,40 @@ function makeQuiz(){
         );
     })
     questions.innerHTML = output.join('');
-    //questions.innerHTML += (`<br> <button id="submit" onclick=alert("${myQuestions}")>Submit</button>`);
 }
 
 function test(test){alert(test)}
 
-// submit button & checking
+// check the answers
 function showAnswer(){
-    const answers = questions.querySelectorAll('.answers')
-    var corrAnswers = 0;
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-        var givenAnswer;
-        const answerNumber = answers[questionNumber];
-        if (currentQuestion.choice) {
-            const choiceSelector =  `input[name=question${questionNumber}]:checked`;
-            givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
-        }
-        else {
-            givenAnswer = (document.getElementById(`openQuestion${questionNumber}`) || {}).value;
-        }
-
-        if(givenAnswer == currentQuestion.correctAnswer){
-            corrAnswers++;
-            answers[questionNumber].style.color = 'green';
-        }
-        else{ answers[questionNumber].style.color = 'red';}
-    });
-    result.innerHTML = `<br> You got ${corrAnswers} questions correct!`;
+    if(registeredUser){
+        const answers = questions.querySelectorAll('.answers')
+        var corrAnswers = 0;
+        myQuestions.forEach((currentQuestion, questionNumber) => {
+            var givenAnswer;
+            const answerNumber = answers[questionNumber];
+            if (currentQuestion.choice) {
+                const choiceSelector =  `input[name=question${questionNumber}]:checked`;
+                givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
+            }
+            else {
+                givenAnswer = (document.getElementById(`openQuestion${questionNumber}`) || {}).value;
+            }
+    
+            if(givenAnswer == currentQuestion.correctAnswer){
+                corrAnswers++;
+                answers[questionNumber].style.color = 'green';
+            }
+            else{ answers[questionNumber].style.color = 'red';}
+        });
+        result.innerHTML = `<br> You got ${corrAnswers} questions correct!`;
+    }
+    else{
+        questions.innerHTML = `<br>
+            ya need ta be registered man.
+            <br><br>
+            <button id="back" onclick=pickTopic()>Back</button> <br>`;
+    }
 }
 
 // select the correct topic and quiz
@@ -85,7 +92,7 @@ function pickQuiz(topic){
     questions.innerHTML = quizContainer.join('');
 }
 
-// show the correct quiz
+// show the questions
 function showQuiz(quiz){
     const thecorrectquestions = myQuestions;  // should be retrieved from DB using quiz
     makeQuiz(thecorrectquestions);
@@ -95,17 +102,13 @@ function showQuiz(quiz){
 const questions = document.getElementById('question');
 const submit = document.getElementById('submit');
 const result = document.getElementById('output');
-var registeredUser = true; 
+var registeredUser = false; 
     // placeholder, only registered can answer questions.
 const jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
     // placeholder for the json input
+    // N.B. assignment 3 needs titles for questions, this has already been implemented in showing the question.
 var myQuestions = JSON.parse(jsonQuestions);
     // should be parsing the string asked from the DB with all (and only) the questions that should be shown
     // otherwise the checking system won't work
 
-if(registeredUser){
-    pickTopic();
-}
-else{
-    questions.innerHTML = `ya need ta be registered man.`;
-}
+pickTopic();    // begin the quiz
