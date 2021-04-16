@@ -110,7 +110,7 @@ function goToSite(){
 const questions = document.getElementById('question');
 const submit = document.getElementById('submit');
 const result = document.getElementById('output');
-var theTopic;
+var theTopic = undefined;
 var registeredUser = true; 
     // placeholder, only registered can answer questions.
 const jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
