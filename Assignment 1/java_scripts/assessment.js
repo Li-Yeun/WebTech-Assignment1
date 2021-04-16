@@ -37,8 +37,6 @@ function makeQuiz(){
     questions.innerHTML = output.join('');
 }
 
-function test(test){alert(test)}
-
 // check the answers
 function showAnswer(){
     if(registeredUser){
@@ -61,7 +59,10 @@ function showAnswer(){
             }
             else{ answers[questionNumber].style.color = 'red';}
         });
-        result.innerHTML = `<br> You got ${corrAnswers} questions correct!`;
+        result.innerHTML = `<br> 
+        You got ${corrAnswers} questions correct!
+        <br><br>
+        <button id="info" onClick=goToSite()>If you want to learn more about this topic click here</button>`;
     }
     else{
         questions.innerHTML = `<br>
@@ -80,6 +81,7 @@ function pickTopic(){
     questions.innerHTML = topicsContainer.join('');
 }
 function pickQuiz(topic){
+    theTopic = topic;
     quizzes = [];
     if(topic == "Web Browsers"){quizzes = ["History", "Functionality"]};
     if(topic == "Safari"){quizzes = ["Apple", "Benefits & drawbacks"]};
@@ -98,11 +100,18 @@ function showQuiz(quiz){
     makeQuiz(thecorrectquestions);
 }
 
+function goToSite(){
+    if (theTopic == "Web Browsers"){window.location.href = "index.html"};
+    if (theTopic == "Safari"){window.location.href = "safari.html"};
+    if (theTopic == "Google Chrome"){window.location.href = "google_chrome.html"};
+}
+
 //var
 const questions = document.getElementById('question');
 const submit = document.getElementById('submit');
 const result = document.getElementById('output');
-var registeredUser = false; 
+var theTopic;
+var registeredUser = true; 
     // placeholder, only registered can answer questions.
 const jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
     // placeholder for the json input
