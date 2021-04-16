@@ -33,10 +33,14 @@ class Question {
       this.answer = answer;
       this.type = type
       this.multiple_choice = multiple_choice;
+      questionCounter = generateID(questionCounter)
+      this.questionID = questionCounter;
     }
 }
 var topicCounter = 0;
 var quizCounter = 0;
+var questionCounter = 0;
+
 function generateID(counter)
 {
   counter += 1;
@@ -98,7 +102,7 @@ db.serialize(function() {
     if(!exists) {
     db.run("CREATE TABLE Topics (topicID INTEGER, title TEXT, link TEXT, quizzes TEXT)");
     db.run("CREATE TABLE Quizzes (topicID INTEGER, quizID INTEGER, title TEXT)");
-    db.run("CREATE TABLE Questions (quizID INTEGER, title TEXT, question TEXT, answer TEXT, type INTEGER, MCQ TEXT)");
+    db.run("CREATE TABLE Questions (questionID INTEGER, quizID INTEGER, title TEXT, question TEXT, answer TEXT, type INTEGER, MCQ TEXT)");
     }
 
     for(let i = 0; i < topics.length; i++)
@@ -124,7 +128,7 @@ db.serialize(function() {
             }
             multiple_choice_options = multiple_choice_options.slice(0, -1); 
           }
-          db.run("INSERT INTO Questions(quizID, title, question, answer, type, MCQ) Values(?, ?, ?, ?, ?, ?)", [current_quiz.quizID, current_question.title, current_question.question, current_question.answer, current_question.type, multiple_choice_options]);
+          db.run("INSERT INTO Questions(questionID, quizID, title, question, answer, type, MCQ) Values(?, ?, ?, ?, ?, ?, ?)", [current_question.questionID, current_quiz.quizID, current_question.title, current_question.question, current_question.answer, current_question.type, multiple_choice_options]);
         }
       }
       quiz_names = quiz_names.slice(0, -1); 

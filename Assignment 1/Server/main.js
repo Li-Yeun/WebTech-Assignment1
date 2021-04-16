@@ -78,7 +78,7 @@ function getQuestions(quizID, callback)
 
     if(row.MCQ == "")
     {
-        response.push(`{ "title" : "${row.title}", "question" : "${row.question}", "type" : ${row.type}, "MCQ ": [${row.MCQ}] }`);
+        response.push(`{  "questionID" : "${row.questionID}", "title" : "${row.title}", "question" : "${row.question}", "type" : ${row.type}, "MCQ ": [${row.MCQ}] }`);
 
     }else
     {
@@ -91,7 +91,6 @@ function getQuestions(quizID, callback)
         //response += quizID;
         callback(response);});
 }
-
 
 var express = require('express');
 const { debug, Console } = require("console");
@@ -110,8 +109,6 @@ app.get('/', function (req, res) {
             responseJSON += response[response.length-1] + ']}';
             res.json(responseJSON);
         }
-
-
     });
 });
 
