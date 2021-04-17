@@ -103,6 +103,7 @@ db.serialize(function() {
     db.run("CREATE TABLE Topics (topicID INTEGER, title TEXT, link TEXT, quizzes TEXT)");
     db.run("CREATE TABLE Quizzes (topicID INTEGER, quizID INTEGER, title TEXT)");
     db.run("CREATE TABLE Questions (questionID INTEGER, quizID INTEGER, title TEXT, question TEXT, answer TEXT, type INTEGER, MCQ TEXT)");
+    db.run("CREATE TABLE Registered_Users (sessionID TEXT, Login TEXT, Password TEXT, Total_questions INTEGER, Total_correct_answers INTEGER, Session_total_questions INTEGER, Session_correct_answers INTEGER)");
     }
 
     for(let i = 0; i < topics.length; i++)
