@@ -37,6 +37,13 @@ class Question {
       this.questionID = questionCounter;
     }
 }
+
+class RegisteredUser {
+  constructor(username, password) {
+    this.username = username;
+    this.password = password;
+  }
+}
 var topicCounter = 0;
 var quizCounter = 0;
 var questionCounter = 0;
@@ -98,12 +105,24 @@ quiz.questions = questions;
 topic.quizzes.push(quiz);
 topics.push(topic);
 
+var registered_users = []
+registered_users.push(new RegisteredUser("admin","admin"))
+registered_users.push(new RegisteredUser("guest","guest"))
+registered_users.push(new RegisteredUser("Li-Yeun","Xu"))
+registered_users.push(new RegisteredUser("Max","Pelt"))
+registered_users.push(new RegisteredUser("Mirco","Clement"))
+
 db.serialize(function() {
     if(!exists) {
     db.run("CREATE TABLE Topics (topicID INTEGER, title TEXT, link TEXT, quizzes TEXT)");
     db.run("CREATE TABLE Quizzes (topicID INTEGER, quizID INTEGER, title TEXT)");
     db.run("CREATE TABLE Questions (questionID INTEGER, quizID INTEGER, title TEXT, question TEXT, answer TEXT, type INTEGER, MCQ TEXT)");
-    db.run("CREATE TABLE Registered_Users (sessionID TEXT, Login TEXT, Password TEXT, Total_questions INTEGER, Total_correct_answers INTEGER, Session_total_questions INTEGER, Session_correct_answers INTEGER)");
+    db.run("CREATE TABLE Registered_Users (sessionID TEXT, username TEXT, password TEXT, total_questions INTEGER, total_correct_answers INTEGER, session_total_questions INTEGER, session_correct_answers INTEGER)");
+    }
+
+    for(let i = 0; i < registered_users.length; i++)
+    {
+      db.run("INSERT INTO Registered_Users(sessionID, username, password, total_questions, total_correct_answers, session_total_questions, session_correct_answers) Values(?, ?, ?, ?, ?, ?, ?)", [-1, registered_users[i].username, registered_users[i].password, 0, 0, 0, 0]);
     }
 
     for(let i = 0; i < topics.length; i++)

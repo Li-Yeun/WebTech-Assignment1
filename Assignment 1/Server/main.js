@@ -35,7 +35,7 @@ function getTopic(topic_id, callback)
     var response = "";
     console.log(topic_id);
 
-    db.each(`SELECT quizzes FROM Topics WHERE topicID = ${topic_id}`, function(err, row) {
+    db.each("SELECT quizzes FROM Topics WHERE topicID = ?", topic_id, function(err, row) {
     if (err) {
         throw err;
     }
@@ -55,7 +55,7 @@ function getQuizID(topic_id, title, callback)
     var response = "" 
     console.log(topic_id);
     console.log(title);
-    db.each(`SELECT quizID FROM Quizzes WHERE topicID = ${topic_id} AND title = "${title}"`, function(err, row) {
+    db.each("SELECT quizID FROM Quizzes WHERE topicID = ? AND title = ?", [topic_id, title], function(err, row) {
     if (err) {
         throw err;
     }
@@ -72,7 +72,7 @@ function getQuestions(quizID, callback)
     var response = []; 
     console.log(quizID);
 
-    db.each(`SELECT * FROM Questions WHERE quizID = ${quizID}`, function(err, row) {
+    db.each("SELECT * FROM Questions WHERE quizID = ?", quizID, function(err, row) {
     if (err) {
         throw err;
     }
@@ -95,11 +95,13 @@ function getQuestions(quizID, callback)
 
 var express = require('express');
 const { debug, Console } = require("console");
+var path = require("path");
+var staticPath = path.join(__dirname, "static");
 var app = express();
 
 app.use(cors());
 
-app.get('/', function (req, res) {
+app.get('/topics', function (req, res) {
     getAllTopics(function(response){
         if(response == [])
         {
@@ -116,7 +118,7 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/', function (req, res) {
+app.get('/topic', function (req, res) {
     let topic_id = req.query.topic_id;
     getTopic(topic_id, function(response){
         console.log(response);
