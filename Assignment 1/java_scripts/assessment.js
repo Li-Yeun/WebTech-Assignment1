@@ -87,7 +87,7 @@ function pickTopic(){
             questions.innerHTML = topicsContainer.join('');
         }
     }
-    req.open("GET", "http://localhost:8081/", true);
+    req.open("GET", "http://localhost:8081/topics", true);
     req.send();
 }
 function pickQuiz(topicID){
