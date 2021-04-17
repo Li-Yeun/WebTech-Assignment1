@@ -116,7 +116,12 @@ app.get('/topic', function (req, res) {
     let topic_id = req.query.topic_id;
     getTopic(topic_id, function(response){
         console.log(response);
+        res.response(response);
         res.json(response);
+        res.status(200).json(response);
+        res.sendStatus(200);
+        res.status(200).json(response);
+        res.send(response);
     });
 });
 
