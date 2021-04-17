@@ -82,48 +82,42 @@ function pickTopic(){
             topics = JSON.parse(JSON.parse(req.responseText));
             topicsContainer.push(`<br> What topic would you like to answer questions about? <br>`);
             topics.topics.forEach(topic => { topicsContainer.push(
-                `<br><button id="topic" value="${topic.topicID}" onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
+                `<br><button id="topic" value=${topic.topicID} onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
             });
             questions.innerHTML = topicsContainer.join('');
         }
     }
     req.open("GET", "http://localhost:8081/", true);
     req.send();
-    // old: topics = ["Web Browsers", "Safari", "Google Chrome"];
-
 }
 function pickQuiz(topicID){
-    theTopic = topicID;
-    quizzes = [];
+    theTopic = topicID; // set the global topic to the selected topic
+    var quizzes = [];
     quizContainer = [];
-    req.open("GET", "http://localhost:8081/topic?topic_id="+topicID, true);
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
-            quizzes = req.responseText;
+            quizzes = JSON.parse(JSON.parse(req.responseText));
+            quizContainer.push(`<br> And what quiz would you like to answer? <br>`);
+            quizzes.quizzes.forEach(quiz => { quizContainer.push(
+                `<br><button id="quiz" value="${quiz.quizID}" onclick=showQuiz(this.value)>${quiz}</button><br>`)
+            });
+            quizContainer.push(`<br> <button id="back" onclick=pickTopic()>Back</button>`);
+            questions.innerHTML = quizContainer.join('');
         }
     }
+    req.open("GET", "http://localhost:8081/topic?topic_id="+topicID, true);
     req.send();
-    //old: if(topic == "Web Browsers" ){quizzes = ["History", "Functionality"]};
-    //old: if(topic == "Safari"){quizzes = ["Apple", "Benefits & drawbacks"]};
-    //old: if(topic == "Google Chrome"){quizzes = ["Features"]};
-
-    quizContainer.push(`<br> And what quiz would you like to answer? <br>`);
-    quizzes.forEach(quiz => { 
-        quizContainer.push(`<br><button id="quiz" value="${quiz}" onclick=showQuiz(this.value)>${quiz}</button><br>`)
-    });
-    quizContainer.push(`<br> <button id="back" onclick=pickTopic()>Back</button>`);
-    questions.innerHTML = quizContainer.join('');
 }
 
 // show the questions
-function showQuiz(quizName){
-    theQuiz = quizName;
-    req.open("GET", `http://localhost:8081/quiz?topic_id=${theTopic}&title=${theQuiz}`);
+function showQuiz(quizID){
+    theQuiz = quizID;
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
-            myQuestions = JSON.parse(req.responseText);
+            myQuestions = JSON.parse(JSON.parse(req.responseText));
         }
     }
+    req.open("GET", `http://localhost:8081/quiz?topic_id=${theTopic}&title=${theQuiz}`);
     req.send();
     makeQuiz();
 }
@@ -142,14 +136,14 @@ var req = new XMLHttpRequest(); // site should support latest browsers, no need 
 
 var theTopic = undefined;
 var theQuiz = undefined;
-var jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
+//old: var jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
 
 var registeredUser = true; 
     // placeholder, only registered can answer questions.
     // placeholder for the json input, 
     // 8080/quiz?topic_id=int&title="Title"
 
-var myQuestions = JSON.parse(jsonQuestions);
+var myQuestions;//old: = JSON.parse(jsonQuestions);
     // should be parsing the string asked from the DB with all (and only) the questions that should be shown
     // otherwise the checking system won't work
 

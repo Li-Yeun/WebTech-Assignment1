@@ -14,7 +14,7 @@ var sqlite3 = require("sqlite3").verbose();
 function getAllTopics(callback)
 {
     var db = new sqlite3.Database(file);
-    var response = []; 
+    var response = [];
     db.serialize(function() {
 
         db.each("SELECT topicID, title FROM Topics", function(err, row) {
@@ -26,7 +26,7 @@ function getAllTopics(callback)
         }, function(){ // calling function when all rows have been pulled
             db.close(); //closing connection
             callback(response);});
-    }); 
+    });
 }
 
 function getTopic(topic_id, callback)
@@ -42,7 +42,7 @@ function getTopic(topic_id, callback)
     if(row.quizzes != "")
     {
         row.quizzes = `"${row.quizzes.replaceAll('$', '" , "')}"`;
-        response = `{ "topic" : { "quizzes" : [ ${row.quizzes} ], "topicID" : ${topic_id}}}`;
+        response = `{ "topic" : { "quizzes" : [ "${row.quizzes}" ], "topicID" : ${topic_id}}}`;
     }
     }, function(){ // calling function when all rows have been pulled
         db.close(); //closing connection
@@ -52,7 +52,7 @@ function getTopic(topic_id, callback)
 function getQuizID(topic_id, title, callback)
 {
     var db = new sqlite3.Database(file);
-    var response = "" 
+    var response = ""
     console.log(topic_id);
     console.log(title);
     db.each("SELECT quizID FROM Quizzes WHERE topicID = ? AND title = ?", [topic_id, title], function(err, row) {
@@ -69,7 +69,7 @@ function getQuizID(topic_id, title, callback)
 function getQuestions(quizID, callback)
 {
     var db = new sqlite3.Database(file);
-    var response = []; 
+    var response = [];
     console.log(quizID);
 
     db.each("SELECT * FROM Questions WHERE quizID = ?", quizID, function(err, row) {
@@ -119,7 +119,7 @@ app.get('/topics', function (req, res) {
 });
 
 app.get('/topic', function (req, res) {
-    let topic_id = req.query.topic_id;
+    let topic_id = parseInt(req.query.topic_id);
     getTopic(topic_id, function(response){
         console.log(response);
         res.json(response);
