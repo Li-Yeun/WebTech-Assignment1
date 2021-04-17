@@ -42,7 +42,7 @@ function getTopic(topic_id, callback)
     if(row.quizzes != "")
     {
         row.quizzes = `"${row.quizzes.replaceAll('$', '" , "')}"`;
-        response = `{ "topic" : { "quizzes" : [ ${row.quizzes} ], "topicID" : ${topic_id}}}`;
+        response = `{ "topic" : { "quizzes" : [ "${row.quizzes}" ], "topicID" : ${topic_id}}}`;
     }
     }, function(){ // calling function when all rows have been pulled
         db.close(); //closing connection
@@ -116,8 +116,8 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/', function (req, res) {
-    let topic_id = req.query.topic_id;
+app.get('/topic', function (req, res) {
+    let topic_id = parseInt(req.query.topic_id);
     getTopic(topic_id, function(response){
         console.log(response);
         res.json(response);
