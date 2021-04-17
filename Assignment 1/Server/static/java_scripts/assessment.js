@@ -87,7 +87,7 @@ function pickTopic(){
             topics = JSON.parse(JSON.parse(req.responseText));
             topicsContainer.push(`<br> What topic would you like to answer questions about? <br>`);
             topics.topics.forEach(topic => { topicsContainer.push(
-                `<br><button id="topic" value=${topic.topicID} onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
+                `<br><button id="topic" value=${topic.topicID + "," + topic.link} onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
             });
             questions.innerHTML = topicsContainer.join('');
         }
@@ -95,8 +95,11 @@ function pickTopic(){
     req.open("GET", "http://localhost:8081/topics", true);
     req.send();
 }
-function pickQuiz(topicID){
-    theTopic = topicID; // set the global topic to the selected topic
+function pickQuiz(topicAttributes){
+    var attributes = topicAttributes.split(",");
+    console.log(topicAttributes);
+    theTopic = attributes[0]; // set the global topic to the selected topic
+    theLink = attributes[1];
     var quizzes = [];
     quizContainer = [];
     var req = new XMLHttpRequest();
@@ -111,7 +114,7 @@ function pickQuiz(topicID){
             questions.innerHTML = quizContainer.join('');
         }
     }
-    req.open("GET", "http://localhost:8081/topic?topic_id="+topicID, true);
+    req.open("GET", "http://localhost:8081/topic?topic_id="+theTopic, true);
     req.send();
 }
 
@@ -133,9 +136,7 @@ function showQuiz(quiz_name){
 }
 
 function goToSite(){
-    if (theTopic == "Web Browsers"){window.location.href = "index.html"};
-    if (theTopic == "Safari"){window.location.href = "safari.html"};
-    if (theTopic == "Google Chrome"){window.location.href = "google_chrome.html"};
+    window.location.href = `http://localhost:8081/${theLink}`;
 }
 
 //var
@@ -143,6 +144,7 @@ const questions = document.getElementById('question');
 const result = document.getElementById('output');
 
 var theTopic = undefined;
+var theLink = undefined;
 var theQuiz = undefined;
 //old: var jsonQuestions = '[{ "title":"Release", "question":"When was the first actual realease of Google Chrome", "answers": {"a":"September 2, 2008", "b":"21st night of september", "c":"December 11, 2008"}, "correctAnswer":"a","choice":"true"}]';
 

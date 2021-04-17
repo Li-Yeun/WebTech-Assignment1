@@ -54,7 +54,7 @@ function generateID(counter)
   return counter;
 }
 var topics = [];
-topic = new Topic("Web browsers");
+topic = new Topic("Web browsers", "index.html");
 
 quiz = new Quiz("History");
 questions = [new Question("WWW", "What does WWW stand for?", "World Wide Web", false), 
@@ -71,7 +71,7 @@ quiz.questions = questions;
 topic.quizzes.push(quiz);
 topics.push(topic);
 
-topic = new Topic("Safari");
+topic = new Topic("Safari", "web_pages/safari.html");
 
 quiz = new Quiz("Apple");
 questions = [new Question("Founder", "Who's the creator of Apple?", "Steve Jobs", false), 
@@ -88,7 +88,7 @@ quiz.questions = questions;
 topic.quizzes.push(quiz);
 topics.push(topic);
 
-topic = new Topic("Google Chrome");
+topic = new Topic("Google Chrome", "web_pages/google_chrome.html");
 
 quiz = new Quiz("Features");
 questions = [new Question("Extensions", "There are two marketplaces to install extensions on Chrome. Which one is false?", "Google Play Store", true, ["Google Play Store", "Chrome Web Store", "G Suite"]), 

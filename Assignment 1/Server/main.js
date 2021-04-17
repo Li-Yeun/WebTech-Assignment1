@@ -16,12 +16,11 @@ function getAllTopics(callback)
     var db = new sqlite3.Database(file);
     var response = [];
     db.serialize(function() {
-
-        db.each("SELECT topicID, title FROM Topics", function(err, row) {
+        db.each("SELECT topicID, title, link FROM Topics", function(err, row) {
         if (err) {
             throw err;
         }
-        response.push(`{ "topicID" : ${row.topicID}, "title" : "${row.title}"}`)
+        response.push(`{ "topicID" : ${row.topicID}, "title" : "${row.title}", "link" : "${row.link}"}`)
         console.log(response);
         }, function(){ // calling function when all rows have been pulled
             db.close(); //closing connection
@@ -100,6 +99,8 @@ var staticPath = path.join(__dirname, "static");
 var app = express();
 
 app.use(cors());
+
+app.use(express.static(staticPath));
 
 app.get('/topics', function (req, res) {
     getAllTopics(function(response){
