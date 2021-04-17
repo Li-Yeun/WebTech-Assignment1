@@ -1,4 +1,5 @@
 var fs = require("fs");
+var cors = require('cors');
 var file = __dirname + "/" + "database.db";
 var exists = fs.existsSync(file);
 
@@ -95,6 +96,9 @@ function getQuestions(quizID, callback)
 var express = require('express');
 const { debug, Console } = require("console");
 var app = express();
+
+app.use(cors());
+
 app.get('/', function (req, res) {
     getAllTopics(function(response){
         if(response == [])
@@ -112,16 +116,11 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/topic', function (req, res) {
+app.get('/', function (req, res) {
     let topic_id = req.query.topic_id;
     getTopic(topic_id, function(response){
         console.log(response);
-        res.response(response);
         res.json(response);
-        res.status(200).json(response);
-        res.sendStatus(200);
-        res.status(200).json(response);
-        res.send(response);
     });
 });
 

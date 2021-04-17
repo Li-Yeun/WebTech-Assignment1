@@ -77,19 +77,20 @@ function showAnswer(){
 function pickTopic(){
     var topics;
     topicsContainer = [];
-    req.open("GET", "http://localhost:8081/", true);
     req.onreadystatechange = function(){
-        if (req.readyState === 4 || req.status === 200){
-            topics = req.responseText;
+        if (req.readyState === 4 && req.status === 200){
+            topics = JSON.parse(JSON.parse(req.responseText));
+            topicsContainer.push(`<br> What topic would you like to answer questions about? <br>`);
+            topics.topics.forEach(topic => { topicsContainer.push(
+                `<br><button id="topic" value="${topic.topicID}" onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
+            });
+            questions.innerHTML = topicsContainer.join('');
         }
     }
+    req.open("GET", "http://localhost:8081/", true);
     req.send();
     // old: topics = ["Web Browsers", "Safari", "Google Chrome"];
-    topicsContainer.push(`<br> What topic would you like to answer questions about? <br>`);
-    topics.forEach(topic => { topicsContainer.push(
-        `<br><button id="topic" value="${topic.topicID}" onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
-    });
-    questions.innerHTML = topicsContainer.join('');
+
 }
 function pickQuiz(topicID){
     theTopic = topicID;
