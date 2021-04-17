@@ -1,38 +1,38 @@
 //create the questions
 function makeQuiz(){
     const output = [];
-    myQuestions.forEach((currentQuestion, questionNumber) => {
+    myQuestions.questions.forEach((currentQuestion, questionNumber) => {
     const possAnswers = [];
-    if(currentQuestion.choice){
-        for(a in currentQuestion.answers){
+    if(currentQuestion.type == 1){
+        for(i = 0 ; i < currentQuestion.MCQ.length; i++){
             possAnswers.push( 
                     `<label>
-                    <input type="radio" name="question${questionNumber}" value="${a}"/>
-                    ${a}: ${currentQuestion.answers[a]} <br>
+                    <input type="radio" name="question${questionNumber}" value="${currentQuestion.MCQ[i]}"/>
+                    ${i}: ${currentQuestion.MCQ[i]} <br>
                     </label>`
                 );
             }
         }
-        else
-        {
-            possAnswers.push(
-                `<label>
-                <input type="text" name="question${questionNumber}" id="openQuestion${questionNumber}" placeholder="put your answer here:"/>
-                </label>`
-            );
-        }
-        output.push(
-            `<br>
-            <div class="title"> Question ${questionNumber + 1}: ${currentQuestion.title}</div>
-            <br>
-            <div class="question"> ${currentQuestion.question}</div>
-            <br>
-            <div class="answers"> ${possAnswers.join('')}</div>
-            <br>
-            <button id="submit" onclick=showAnswer()>Submit</button>
-            <br><br>
-            <button id="back" onclick=pickTopic()>Back</button> <br>`
+    else
+    {
+        possAnswers.push(
+            `<label>
+            <input type="text" name="question${questionNumber}" id="openQuestion${questionNumber}" placeholder="put your answer here:"/>
+            </label>`
         );
+    }
+    output.push(
+        `<br>
+        <div class="title"> Question ${questionNumber + 1}: ${currentQuestion.title}</div>
+        <br>
+        <div class="question"> ${currentQuestion.question}</div>
+        <br>
+        <div class="answers"> ${possAnswers.join('')}</div>
+        <br>
+        <button id="submit" onclick=showAnswer()>Submit</button>
+        <br><br>
+        <button id="back" onclick=pickTopic()>Back</button> <br>`
+    );
     })
     questions.innerHTML = output.join('');
 }
@@ -42,25 +42,29 @@ function showAnswer(){
     if(registeredUser){
         const answers = questions.querySelectorAll('.answers')
         var corrAnswers = 0;
-        myQuestions.forEach((currentQuestion, questionNumber) => {
+        myQuestions.questions.forEach((currentQuestion, questionNumber) => {
             var givenAnswer;
             const answerNumber = answers[questionNumber];
-            if (currentQuestion.choice) {
+            console.log(answerNumber)
+            if (currentQuestion.type == 1) {
                 const choiceSelector =  `input[name=question${questionNumber}]:checked`;
                 givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
+                console.log("DEBUG:")
+                console.log(givenAnswer);
+                console.log(currentQuestion.answer);
             }
             else {
                 givenAnswer = (document.getElementById(`openQuestion${questionNumber}`) || {}).value;
             }
-    
-            if(givenAnswer == currentQuestion.correctAnswer){
+            
+            if(givenAnswer == currentQuestion.answer){
                 corrAnswers++;
                 answers[questionNumber].style.color = 'green';
             }
-            else{ answers[questionNumber].style.color = 'red'; answers.innerHTML += `The correct answer was ${currentQuestion.correctAnswer}.`}
+            else{ answers[questionNumber].style.color = 'red'; answers.innerHTML += `The correct answer was ${currentQuestion.answer}.`}
         });
         result.innerHTML = `<br> You got ${corrAnswers} questions correct!`
-        if (corrAnswers != myQuestions.length){
+        if (corrAnswers != myQuestions.questions.length){
             result.innerHTML += `<br><br>
             <button id="info" onClick=goToSite()>If you want to learn more about this topic click here</button>`;
         }
@@ -77,6 +81,7 @@ function showAnswer(){
 function pickTopic(){
     var topics;
     topicsContainer = [];
+    var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
             topics = JSON.parse(JSON.parse(req.responseText));
@@ -94,12 +99,13 @@ function pickQuiz(topicID){
     theTopic = topicID; // set the global topic to the selected topic
     var quizzes = [];
     quizContainer = [];
+    var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
             quizzes = JSON.parse(JSON.parse(req.responseText));
             quizContainer.push(`<br> And what quiz would you like to answer? <br>`);
-            quizzes.quizzes.forEach(quiz => { quizContainer.push(
-                `<br><button id="quiz" value="${quiz.quizID}" onclick=showQuiz(this.value)>${quiz}</button><br>`)
+            quizzes.topic.quizzes.forEach(quiz => {quizContainer.push(
+                `<br><button id="quiz" value="${quiz}" onclick=showQuiz(this.value)>${quiz}</button><br>`)
             });
             quizContainer.push(`<br> <button id="back" onclick=pickTopic()>Back</button>`);
             questions.innerHTML = quizContainer.join('');
@@ -110,16 +116,20 @@ function pickQuiz(topicID){
 }
 
 // show the questions
-function showQuiz(quizID){
-    theQuiz = quizID;
+function showQuiz(quiz_name){
+    theQuiz = quiz_name;
+    console.log(quiz_name);
+    var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
             myQuestions = JSON.parse(JSON.parse(req.responseText));
+            console.log(myQuestions)
+            makeQuiz();
+  
         }
     }
     req.open("GET", `http://localhost:8081/quiz?topic_id=${theTopic}&title=${theQuiz}`);
     req.send();
-    makeQuiz();
 }
 
 function goToSite(){
@@ -131,8 +141,6 @@ function goToSite(){
 //var
 const questions = document.getElementById('question');
 const result = document.getElementById('output');
-
-var req = new XMLHttpRequest(); // site should support latest browsers, no need to add ifelse for older XML sessions
 
 var theTopic = undefined;
 var theQuiz = undefined;

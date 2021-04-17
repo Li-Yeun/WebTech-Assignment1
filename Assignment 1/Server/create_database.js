@@ -57,7 +57,7 @@ var topics = [];
 topic = new Topic("Web browsers");
 
 quiz = new Quiz("History");
-questions = [new Question("WWW", "What does WWW stand for?", "World Wide web", false), 
+questions = [new Question("WWW", "What does WWW stand for?", "World Wide Web", false), 
              new Question("The first browser", "Who invented the first browser?", "Tim Berners-Lee", true, ["Steve Jobs", "Neil Larson", "Tim Berners-Lee", "Ted Larson"]), 
              new Question("Browser war", "The browser war started with the release of:", "Internet Explorer", false)];
 quiz.questions = questions;
@@ -80,7 +80,7 @@ questions = [new Question("Founder", "Who's the creator of Apple?", "Steve Jobs"
 quiz.questions = questions;
 topic.quizzes.push(quiz);
 
-quiz = new Quiz("Benefits & drawbacks");
+quiz = new Quiz("Benefits_AND_drawbacks");
 questions = [new Question("Drawbacks", "Safari's biggest downside on Apple devices is:", "lack of a robust ecosystem", true, ["poor battery optimization", "lack of a robust ecosystem", "lack of privacy regulations"]), 
              new Question("Benefits", "Is the following statement true or false? Safari boasts better integration with Apple’s graphics rendering pipeline.", "True", true, ["True", "False"]),
              new Question("Privacy", "One of safari's benefit is that Apple’s business is not founded upon the idea of tracking and analyzing user data. Which of Apple's competitor do build their business upon that idea?", "Google", false)];

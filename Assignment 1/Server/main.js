@@ -41,8 +41,8 @@ function getTopic(topic_id, callback)
     }
     if(row.quizzes != "")
     {
-        row.quizzes = `"${row.quizzes.replaceAll('$', '" , "')}"`;
-        response = `{ "topic" : { "quizzes" : [ "${row.quizzes}" ], "topicID" : ${topic_id}}}`;
+        row.quizzes = `"${row.quizzes.replace(/\$/g, '" , "')}"`;
+        response = `{ "topic" : { "quizzes" : [ ${row.quizzes} ], "topicID" : ${topic_id}}}`;
     }
     }, function(){ // calling function when all rows have been pulled
         db.close(); //closing connection
@@ -79,12 +79,12 @@ function getQuestions(quizID, callback)
 
     if(row.MCQ == "")
     {
-        response.push(`{  "questionID" : "${row.questionID}", "title" : "${row.title}", "question" : "${row.question}", "type" : ${row.type}, "MCQ ": [${row.MCQ}] }`);
+        response.push(`{  "questionID" : "${row.questionID}", "title" : "${row.title}", "question" : "${row.question}", "answer" : "${row.answer}", "type" : ${row.type}, "MCQ ": [${row.MCQ}] }`);
 
     }else
     {
         row.MCQ = row.MCQ.replaceAll('$', '","')
-        response.push(`{ "title" : "${row.title}", "question" : "${row.question}", "type" : ${row.type}, "MCQ ": ["${row.MCQ}"] }`);
+        response.push(`{ "title" : "${row.title}", "question" : "${row.question}", "answer" : "${row.answer}", "type" : ${row.type}, "MCQ": ["${row.MCQ}"] }`);
     }
 
     }, function(){ // calling function when all rows have been pulled
