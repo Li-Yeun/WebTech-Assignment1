@@ -62,7 +62,7 @@ function changeValueSelector()
                           break;
         case "color-scheme": newSelector = createInputSelector("color");
                              break;
-        case "font-family": newSelector = createSelectSelector(["Verdana", "Arial", "Calibri", "Courier", "Impact"]);
+        case "font-family": newSelector = createSelectSelector(["Verdana", "Arial", "Calibri", "Courier", "Impact", "Jazz LET"]);
                           break;
     }       
     
