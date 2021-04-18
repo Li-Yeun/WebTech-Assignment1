@@ -10,6 +10,7 @@ function makeQuiz(){
                     <input type="radio" name="question${questionNumber}" value="${currentQuestion.MCQ[i]}"/>
                     ${i}: ${currentQuestion.MCQ[i]} <br>
                     </label>`
+   
                 );
             }
         }
@@ -21,20 +22,23 @@ function makeQuiz(){
             </label>`
         );
     }
+
+    possAnswers.push(`<div class="response"></div>`)
+
     output.push(
         `<br>
         <div class="title"> Question ${questionNumber + 1}: ${currentQuestion.title}</div>
         <br>
         <div class="question"> ${currentQuestion.question}</div>
         <br>
-        <div class="answers"> ${possAnswers.join('')}</div>
-        <br>
-        <button id="submit" onclick=showAnswer()>Submit</button>
-        <br><br>
-        <button id="back" onclick=pickTopic()>Back</button> <br>`
+        <div class="answers"> ${possAnswers.join('')}</div>`
     );
     })
-    questions.innerHTML = output.join('');
+    questions.innerHTML = output.join('') + 
+    `<br>
+    <button id="submit" onclick=showAnswer()>Submit</button> 
+    <br><br> 
+    <button id="back" onclick=pickTopic()>Back</button> <br>`;
 }
 
 // check the answers
@@ -45,23 +49,22 @@ function showAnswer(){
         myQuestions.questions.forEach((currentQuestion, questionNumber) => {
             var givenAnswer;
             const answerNumber = answers[questionNumber];
-            console.log(answerNumber)
+            var response = (answerNumber.querySelector(".response") || {});
             if (currentQuestion.type == 1) {
                 const choiceSelector =  `input[name=question${questionNumber}]:checked`;
                 givenAnswer = (answerNumber.querySelector(choiceSelector) || {}).value;
-                console.log("DEBUG:")
-                console.log(givenAnswer);
-                console.log(currentQuestion.answer);
+                response.innerHTML = "";
             }
             else {
                 givenAnswer = (document.getElementById(`openQuestion${questionNumber}`) || {}).value;
+                response.innerHTML = "Correct";
             }
             
             if(givenAnswer == currentQuestion.answer){
                 corrAnswers++;
                 answers[questionNumber].style.color = 'green';
             }
-            else{ answers[questionNumber].style.color = 'red'; answers.innerHTML += `The correct answer was ${currentQuestion.answer}.`}
+            else{ answers[questionNumber].style.color = 'red'; response.innerHTML = `The correct answer was: ${currentQuestion.answer}.`}
         });
         result.innerHTML = `<br> You got ${corrAnswers} questions correct!`
         if (corrAnswers != myQuestions.questions.length){
