@@ -71,6 +71,23 @@ function showAnswer(){
             result.innerHTML += `<br><br>
             <button id="info" onClick=goToSite()>If you want to learn more about this topic click here</button>`;
         }
+        
+        // Send to server
+        req = new XMLHttpRequest();
+        req.onreadystatechange = function(){
+            if (req.readyState === 4){
+                if(req.status === 200)
+                {
+                    console.log("DATA SEND");
+                }else
+                {
+                    console.log("FAILED SENDING");
+                }
+            }
+        }
+        req.open("POST", "http://localhost:8081/questions", true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(`totalQuestions=${myQuestions.questions.length}&correctAnswers=${corrAnswers}`);
     }
     else{
         questions.innerHTML = `<br>
@@ -93,6 +110,8 @@ function pickTopic(){
                 `<br><button id="topic" value=${topic.topicID + "," + topic.link} onclick=pickQuiz(this.value)>${topic.title}</button><br>`);
             });
             questions.innerHTML = topicsContainer.join('');
+
+            login("admin","admin"); // DIT MOET ERGENS ANDERS GEBREUREN
         }
     }
     req.open("GET", "http://localhost:8081/topics", true);
@@ -100,7 +119,6 @@ function pickTopic(){
 }
 function pickQuiz(topicAttributes){
     var attributes = topicAttributes.split(",");
-    console.log(topicAttributes);
     theTopic = attributes[0]; // set the global topic to the selected topic
     theLink = attributes[1];
     var quizzes = [];
@@ -124,12 +142,10 @@ function pickQuiz(topicAttributes){
 // show the questions
 function showQuiz(quiz_name){
     theQuiz = quiz_name;
-    console.log(quiz_name);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
             myQuestions = JSON.parse(JSON.parse(req.responseText));
-            console.log(myQuestions)
             makeQuiz();
   
         }
@@ -142,6 +158,50 @@ function goToSite(){
     window.location.href = `http://localhost:8081/${theLink}`;
 }
 
+
+function getProfile()
+{
+    req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        if (req.readyState === 4){
+            if(req.status === 200)
+            {
+                console.log("PROFILE");
+                let profile = JSON.parse(JSON.parse(req.responseText));
+                console.log("total questions : ", profile.total_questions);
+                console.log("total correct answers : ", profile.total_correct_answers);
+                console.log("session total questions : ", profile.session_total_questions);
+                console.log("session correct answer : ", profile.session_correct_answers);     
+            }else
+            {
+                console.log("FAILED GETTING PROFILE");
+            }
+        }
+    }
+    req.open("GET", "http://localhost:8081/profile", true);
+    req.send();
+}
+
+function login(username, password)
+{
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        if (req.readyState === 4){
+            if(req.status === 200)
+            {
+                // CODE ALS LOGIN GESLAAGD IS
+                console.log("LOGGED IN");
+            }else
+            {
+                // CODE ALS LOGIN GEFAALD IS
+                console.log("FAILED LOGIN");
+            }
+        }
+    }
+    req.open("POST", "http://localhost:8081/login", true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(`username=${username}&password=${password}`);
+}
 //var
 const questions = document.getElementById('question');
 const result = document.getElementById('output');
