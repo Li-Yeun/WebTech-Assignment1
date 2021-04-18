@@ -5,6 +5,13 @@ function createInitialButtons(){
      <button id="register" style="background-color:lightgrey" onclick=registerScreen()>Register</button>`;
 }
 
+function createLoggedInButtons(){
+    account.innerHTML = 
+    `<u>Welcome ${username}!</u>
+     <button id="reportPage" style="background-color:lightgrey" onclick=ReportPageScreen()>Report page</button>
+     <button id="logout" style="background-color:red" onclick=logout()>logout</button>`;
+}
+
 function loginScreen()
 {
     account.innerHTML = "";
@@ -38,19 +45,20 @@ function registerScreen()
 }
 
 function initialState()
-{     
+{   
+    localStorage.setItem('path', 'http://localhost:8007/');
     createInitialButtons();
     pickTopic();    
 }
 
 function initialStateWithLogIn()
 {     
-    account.innerHTML = 
-    `<u>Welcome ${username}!</u>
-     <button id="reportPage" style="background-color:lightgrey" onclick=ReportPageScreen()>Report page</button>
-     <button id="logout" style="background-color:red" onclick=logout()>logout</button>`;
+    localStorage.setItem('path', 'http://localhost:8007/');
+    createLoggedInButtons();
     pickTopic();
 }
+
+
 
 
 //create the questions
@@ -140,7 +148,7 @@ function showAnswer(){
                 }
             }
         }
-        req.open("POST", "http://localhost:8081/questions", true);
+        req.open("POST", "http://localhost:8007/questions", true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.send(`totalQuestions=${myQuestions.questions.length}&correctAnswers=${corrAnswers}`);
     }
@@ -160,6 +168,7 @@ function pickTopic(){
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
+            localStorage.setItem('path', 'http://localhost:8007/topics');
             topics = JSON.parse(JSON.parse(req.responseText));
             topicsContainer.push(`<br> What topic would you like to answer questions about? <br>`);
             topics.topics.forEach(topic => { topicsContainer.push(
@@ -168,7 +177,7 @@ function pickTopic(){
             questions.innerHTML = topicsContainer.join('');
         }
     }
-    req.open("GET", "http://localhost:8081/topics", true);
+    req.open("GET", "http://localhost:8007/topics", true);
     req.send();
 }
 function pickQuiz(topicAttributes){
@@ -180,6 +189,10 @@ function pickQuiz(topicAttributes){
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
+            localStorage.setItem('path', 'http://localhost:8007/topic');
+            localStorage.setItem('theTopic', theTopic);
+            localStorage.setItem('theLink', theLink);
+
             quizzes = JSON.parse(JSON.parse(req.responseText));
             quizContainer.push(`<br> And what quiz would you like to answer? <br>`);
             quizzes.topic.quizzes.forEach(quiz => {quizContainer.push(
@@ -189,7 +202,7 @@ function pickQuiz(topicAttributes){
             questions.innerHTML = quizContainer.join('');
         }
     }
-    req.open("GET", "http://localhost:8081/topic?topic_id="+theTopic, true);
+    req.open("GET", "http://localhost:8007/topic?topic_id="+theTopic, true);
     req.send();
 }
 
@@ -200,16 +213,17 @@ function showQuiz(quiz_name){
     req.onreadystatechange = function(){
         if (req.readyState === 4 && req.status === 200){
             myQuestions = JSON.parse(JSON.parse(req.responseText));
+            localStorage.setItem('path', 'http://localhost:8007/quiz');
+            localStorage.setItem('theQuiz', theQuiz);
             makeQuiz();
-  
         }
     }
-    req.open("GET", `http://localhost:8081/quiz?topic_id=${theTopic}&title=${theQuiz}`);
+    req.open("GET", `http://localhost:8007/quiz?topic_id=${theTopic}&title=${theQuiz}`);
     req.send();
 }
 
 function goToSite(){
-    window.location.href = `http://localhost:8081/${theLink}`;
+    window.location.href = `http://localhost:8007/${theLink}`;
 }
 
 
@@ -249,12 +263,13 @@ function ReportPageScreen()
             }
         }
     }
-    req.open("GET", "http://localhost:8081/reportPage", true);
+    req.open("GET", "http://localhost:8007/reportPage", true);
     req.send();
 }
 
 function login()
 {
+    localStorage.clear();
     username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
@@ -265,21 +280,27 @@ function login()
             {
                 // CODE ALS LOGIN GESLAAGD IS
                 registeredUser = true;
+                localStorage.setItem('registeredUser', true);
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
                 initialStateWithLogIn();
             }else
             {
                 // CODE ALS LOGIN GEFAALD IS
+                localStorage.setItem('registeredUser', false);
                 result.innerHTML = "<br> <b> Wrong username or password </b>"
             }
         }
     }
-    req.open("POST", "http://localhost:8081/login", true);
+    req.open("POST", "http://localhost:8007/login", true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.send(`username=${username}&password=${password}`);
 }
 
 function register()
 {
+    localStorage.clear();
+
     username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
@@ -290,17 +311,22 @@ function register()
             {
                 // CODE ALS REGISTREREN GESLAAGD IS
                 registeredUser = true; 
+                localStorage.setItem('registeredUser', true);
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
                 initialStateWithLogIn();
             }else if(req.status === 400)
             {
+                localStorage.setItem('registeredUser', false);
                 result.innerHTML = "<br> <b>Invalid username or password. Try Again!</b>"
             }else
             {
+                localStorage.setItem('registeredUser', false);
                 result.innerHTML = "<br> <b>Username already exist. Try Again!</b>"
             }
         }
     }
-    req.open("POST", "http://localhost:8081/register", true);
+    req.open("POST", "http://localhost:8007/register", true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.send(`username=${username}&password=${password}`);
 }
@@ -314,13 +340,64 @@ function logout()
             {
                 // LogOut succeeded
                 registeredUser = false;
+                localStorage.clear();
                 initialState();
             }
         }
     }
-    req.open("POST", "http://localhost:8081/logout", true);
+    req.open("POST", "http://localhost:8007/logout", true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.send(`username=${username}`);
+}
+
+function checkLocalStorage()
+{
+    var path = localStorage.getItem('path')
+    if(localStorage.getItem('registeredUser'))
+    {
+        username = localStorage.getItem('username');
+        password = localStorage.getItem('password');
+        
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(){
+            if (req.readyState === 4){
+                if(req.status === 200)
+                {
+                    // CODE ALS LOGIN GESLAAGD IS
+                    registeredUser = true;
+                    localStorage.setItem('registeredUser', true);
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', password);
+                    createLoggedInButtons();
+                }else
+                {
+                    // CODE ALS LOGIN GEFAALD IS
+                    localStorage.setItem('registeredUser', false);
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('password');
+                    registeredUser = false;
+                    createInitialButtons();
+                }
+            }
+        }
+        req.open("POST", "http://localhost:8007/login", true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(`username=${username}&password=${password}`);
+    }else
+    {
+        createInitialButtons();
+    }
+
+    if(path == 'http://localhost:8007/quiz')
+    {
+        theLink = localStorage.getItem('theLink');
+        theTopic = localStorage.getItem('theTopic');
+        showQuiz(localStorage.getItem('theQuiz'));
+
+    }else
+    {
+        pickTopic();   
+    }
 }
 
 //var
@@ -337,10 +414,10 @@ var registeredUser = false;
 var username = undefined;
     // placeholder, only registered can answer questions.
     // placeholder for the json input, 
-    // 8080/quiz?topic_id=int&title="Title"
+    // 8007/quiz?topic_id=int&title="Title"
 
 var myQuestions;//old: = JSON.parse(jsonQuestions);
     // should be parsing the string asked from the DB with all (and only) the questions that should be shown
     // otherwise the checking system won't work
 
-initialState(); // begin the quiz
+checkLocalStorage();
