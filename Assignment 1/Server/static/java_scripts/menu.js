@@ -27,6 +27,7 @@ function apply()
 
 }
 
+// select the right option and property
 function getSelectedOption(selector)
 {
     var yourSelect = document.getElementById(selector);
@@ -37,7 +38,6 @@ function getSelectedOption(selector)
         return yourSelect.value;
     }
 }
-
 function setAttributeProperty(input, attribute, value)
 {
     switch(attribute)

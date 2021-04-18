@@ -4,14 +4,12 @@ function createInitialButtons(){
     `<button id="login" style="background-color:lightgrey" onclick=loginScreen()>Login</button>
      <button id="register" style="background-color:lightgrey" onclick=registerScreen()>Register</button>`;
 }
-
 function createLoggedInButtons(){
     account.innerHTML = 
     `<u>Welcome ${username}!</u>
      <button id="reportPage" style="background-color:lightgrey" onclick=ReportPageScreen()>Report page</button>
      <button id="logout" style="background-color:red" onclick=logout()>logout</button>`;
 }
-
 function loginScreen()
 {
     account.innerHTML = "";
@@ -27,7 +25,6 @@ function loginScreen()
     <button id="login" style="background-color:lightgrey" onclick=login()>Login</button>
     <button id="back" onclick=initialState()>Back</button> <br>`
 }
-
 function registerScreen()
 {
     account.innerHTML = "";
@@ -44,13 +41,13 @@ function registerScreen()
     <button id="back" onclick=initialState()>Back</button> <br>`
 }
 
+// initialise the state the site is in
 function initialState()
 {   
     localStorage.setItem('path', 'http://localhost:8007/');
     createInitialButtons();
     pickTopic();    
 }
-
 function initialStateWithLogIn()
 {     
     localStorage.setItem('path', 'http://localhost:8007/');
