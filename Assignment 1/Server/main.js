@@ -73,6 +73,13 @@ function checkRegisteredUsers(sessionID, callback)
         callback(response);});
 }
 
+function logOutRegisteredUser(sessionID, username)
+{
+    var db = new sqlite3.Database(file);
+    db.run("UPDATE Registered_Users SET sessionID = ? WHERE sessionID = ? AND username = ?", [-1, sessionID, username]);
+    db.close
+}
+
 function updateScore(sessionID, totalQuestions, correctAnswers)
 {
     var db = new sqlite3.Database(file);
@@ -214,11 +221,8 @@ app.use(express.urlencoded({
 app.use(express.static(staticPath));
 
 app.post('/login', (req, res)=>{
-    console.log("STEP 0")
-    console.log(req.body)
     if(req.body.username && (req.body.password))
     {
-        console.log("STEP 1")
         checkCredentials(req.body.username, req.body.password, req.sessionID, function(response){
             if(response == true)
             {
@@ -251,8 +255,13 @@ app.post('/register', (req, res)=>{ //session save
         });
     }else
     {
-        res.sendStatus(404);
+        res.sendStatus(400);
     }
+});
+
+app.post('/logout', (req, res)=>{
+    logOutRegisteredUser(req.sessionID,req.body.username)
+    res.sendStatus(200);
 });
 
 app.get('/topics', function (req, res) {
