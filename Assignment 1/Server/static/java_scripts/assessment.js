@@ -1,4 +1,4 @@
-//create buttons for login, register, logout and profile
+//create buttons for login, register, logout and report page
 function createInitialButtons(){
     account.innerHTML = 
     `<button id="login" style="background-color:lightgrey" onclick=loginScreen()>Login</button>
@@ -47,7 +47,7 @@ function initialStateWithLogIn()
 {     
     account.innerHTML = 
     `<u>Welcome ${username}!</u>
-     <button id="profile" style="background-color:lightgrey" onclick=profileScreen()>Report page</button>
+     <button id="reportPage" style="background-color:lightgrey" onclick=ReportPageScreen()>Report page</button>
      <button id="logout" style="background-color:red" onclick=logout()>logout</button>`;
     pickTopic();
 }
@@ -213,7 +213,7 @@ function goToSite(){
 }
 
 
-function profileScreen()
+function ReportPageScreen()
 {
     questions.innerHTML = "";
     result.innerHTML = "";
@@ -223,33 +223,33 @@ function profileScreen()
             if(req.status === 200)
             {
                 account.innerHTML = `<u>Report page: ${username}</u><br>`;
-                let profile = JSON.parse(JSON.parse(req.responseText));
-                account.innerHTML += `total questions : ${profile.total_questions}<br>`
-                account.innerHTML += `total correct answers : ${profile.total_correct_answers}<br>`
-                if(profile.total_questions == 0)
+                let reportPage = JSON.parse(JSON.parse(req.responseText));
+                account.innerHTML += `total questions : ${reportPage.total_questions}<br>`
+                account.innerHTML += `total correct answers : ${reportPage.total_correct_answers}<br>`
+                if(reportPage.total_questions == 0)
                 {
                     account.innerHTML += "<b>overall success rate: 100%</b><br><br>"
                 }else
                 {
-                    account.innerHTML += `<b>overall success rate : ${(parseFloat(profile.total_correct_answers)/parseFloat(profile.total_questions)*100).toFixed(2)}%</b><br><br>`
+                    account.innerHTML += `<b>overall success rate : ${(parseFloat(reportPage.total_correct_answers)/parseFloat(reportPage.total_questions)*100).toFixed(2)}%</b><br><br>`
                 }
-                account.innerHTML += `session total questions : ${profile.session_total_questions}<br>`
-                account.innerHTML += `session correct answer : ${profile.session_correct_answers}<br>` 
-                if(profile.session_total_questions == 0)
+                account.innerHTML += `session total questions : ${reportPage.session_total_questions}<br>`
+                account.innerHTML += `session correct answer : ${reportPage.session_correct_answers}<br>` 
+                if(reportPage.session_total_questions == 0)
                 {
                     account.innerHTML += "<b>session success rate: 100%</b><br>"
                 }else
                 {
-                    account.innerHTML += `<b>session success rate : ${(parseFloat(profile.session_correct_answers)/parseFloat(profile.session_total_questions)*100).toFixed(2)}%</b><br>`
+                    account.innerHTML += `<b>session success rate : ${(parseFloat(reportPage.session_correct_answers)/parseFloat(reportPage.session_total_questions)*100).toFixed(2)}%</b><br>`
                 }
                 account.innerHTML += `<br> <button id="back" onclick=initialStateWithLogIn()>Back</button>`
             }else
             {
-                console.log("FAILED GETTING PROFILE");
+                console.log("FAILED GETTING Report Page");
             }
         }
     }
-    req.open("GET", "http://localhost:8081/profile", true);
+    req.open("GET", "http://localhost:8081/reportPage", true);
     req.send();
 }
 

@@ -167,7 +167,7 @@ function getQuestions(quizID, callback)
         callback(response);});
 }
 
-function getProfile(sessionID, callback)
+function getReportPage(sessionID, callback)
 {
     var db = new sqlite3.Database(file);
     var response = "";
@@ -312,13 +312,13 @@ app.get('/quiz', function (req, res) {
     });
 });
 
-app.get('/profile', function (req, res) {
+app.get('/reportPage', function (req, res) {
     checkRegisteredUsers(req.sessionID, function(response){
         if(response == true)
         {
-            getProfile(req.sessionID, function(profile)
+            getReportPage(req.sessionID, function(report)
             {
-                res.json(profile);
+                res.json(report);
             })
         }else
         {
