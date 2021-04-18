@@ -82,7 +82,7 @@ function getQuestions(quizID, callback)
 
     }else
     {
-        row.MCQ = row.MCQ.replaceAll('$', '","')
+        row.MCQ = row.MCQ.replace(/\$/g, '","')
         response.push(`{ "title" : "${row.title}", "question" : "${row.question}", "answer" : "${row.answer}", "type" : ${row.type}, "MCQ": ["${row.MCQ}"] }`);
     }
 
